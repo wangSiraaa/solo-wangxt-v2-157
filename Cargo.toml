@@ -1,0 +1,49 @@
+[package]
+name = "plugin-host"
+version = "0.1.0"
+edition = "2021"
+description = "Sandboxed execution boundary for third-party compute plugins (Rust + Axum + Wasmtime + PostgreSQL)"
+
+[lib]
+name = "plugin_host"
+path = "src/lib.rs"
+
+[[bin]]
+name = "plugin-host"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+axum = "0.8"
+base64 = "0.22"
+chrono = { version = "0.4", features = ["serde"] }
+jsonschema = "0.26"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+sqlx = { version = "0.8", default-features = false, features = [
+    "runtime-tokio",
+    "tls-rustls",
+    "postgres",
+    "uuid",
+    "chrono",
+    "json",
+    "macros",
+] }
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+wasmtime = "29"
+
+[dev-dependencies]
+base64 = "0.22"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "postgres"] }
+wat = "1"
+
+[profile.dev.package.wasmtime]
+opt-level = 2
+
+[profile.dev.package.cranelift-codegen]
+opt-level = 2
